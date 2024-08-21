@@ -132,11 +132,11 @@ class Dropout():
             raise ValueError(f"Dropout probability has to be between 0 and 1, but got {p}")
         self.dropout_prob = p
 
-    def __call__(self, input) -> Tensor:
-        return self.forward(input)
+    def __call__(self, input, eval=False) -> Tensor:
+        return self.forward(input, eval)
 
-    def forward(self, input) -> Tensor:
-        if self.dropout_prob == 0:
+    def forward(self, input, eval=False) -> Tensor:
+        if eval or self.dropout_prob == 0:
             return input
         dropped_num = input.shape[0] * self.dropout_prob
         dropped = torch.randint(input.shape[0], (1, int(dropped_num)))
@@ -165,6 +165,10 @@ class MLP():
         self.softmax = torch.nn.Softmax(dim=0)
         self.loss_fn = torch.nn.CrossEntropyLoss()
         self.lr = 0.01
+        self.eval_ = False
+
+    def eval(self):
+        self.eval_ = True
 
     def save_weights(self, filename) -> None:
         weights = []
@@ -218,8 +222,8 @@ class MLP():
         img = torch.flatten(img) # flatten 28x28 to 1x784
         img = img.div(255) # normalize pixel values between 0 and 1
 
-        input = self.dropout(self.relu(self.input(img)))
-        hidden = self.dropout(self.relu(self.hidden(input)))
+        input = self.dropout(self.relu(self.input(img)), eval=self.eval_)
+        hidden = self.dropout(self.relu(self.hidden(input)), eval=self.eval_)
         output = self.output(hidden)
 
         truth_label = torch.zeros(10)
@@ -237,6 +241,7 @@ class MLP():
         return loss, pred == label
 
     def train(self, data, epochs, lr) -> None:
+        self.eval_ = False
         if lr < 0.0:
             raise ValueError(f"Invalid learning rate: {lr}")
         self.lr = lr
@@ -268,9 +273,10 @@ class MLP():
             print(f"Avg Training Loss: ", tot_train_loss/((epoch+1)*(len(train_data))))
             print(f"Training Accuracy: {sum(train_accuracy)/len(train_accuracy)}")
             print("--------------------------------------")
-            self.eval(val_data)
+            self.val(val_data)
 
-    def eval(self, data) -> None:
+    def val(self, data) -> None:
+        self.eval_ = True
         tot_val_loss = 0
         val_accuracy = []
 
@@ -285,3 +291,5 @@ class MLP():
             print(f"Validation Loss: ", tot_val_loss/len(data))
             print(f"Validation Accuracy: {sum(val_accuracy)/len(val_accuracy)}")
         print("--------------------------------------")
+        
+        self.eval_ = False
