@@ -1,5 +1,4 @@
 env/*
-testSet/*
-trainingSet/*
+MNIST-jpg_dataset/*
 __pycache__/*
 .DS_Store

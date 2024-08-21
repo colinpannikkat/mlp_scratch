@@ -2,12 +2,13 @@ from mlp import MLP, Dataset
 from tqdm import tqdm
 
 def main():
-    mlp = MLP(dp=0.1)
-    data = Dataset(data_pth="trainingSet")
+    mlp = MLP(dp=0.2)
+    data = Dataset(data_pth="MNIST-jpg_dataset")
 
     train_data, test_data = data.split_shuffle(0.8)
     mlp.train(train_data, epochs=10, lr=0.001)
 
+    mlp.eval()
     test_accuracy = []
     tot_test_loss = 0
     
