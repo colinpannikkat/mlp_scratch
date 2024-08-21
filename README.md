@@ -38,7 +38,7 @@ My architecture is as follows:
 
 ## Results
 
-I achieved a test accuracy of $0.9302$ with a loss of $0.2278$ on the [MNIST as JPG](https://www.kaggle.com/datasets/scolianni/mnistasjpg/data) dataset after $10$ epochs using gradient descent optimization. I used a learning rate of $0.001$ and a dropout probability of $0.1$. The weights for that model can be downloaded from `weights.pt`.
+I achieved a test accuracy of $0.9327$ with a loss of $0.2502$ on the [MNIST as JPG](https://www.kaggle.com/datasets/scolianni/mnistasjpg/data) dataset after $10$ epochs using gradient descent optimization. I used a learning rate of $0.001$ and a dropout probability of $0.1$. The weights for that model can be downloaded from `weights.pt`.
 
 Using PyTorch functions and PyTorch's SGD optimizer in `torch-mlp.py`, I was able to achieve an accuracy of $>98\\%$. Obviously, I am aim to match that with my own implementation.
 
