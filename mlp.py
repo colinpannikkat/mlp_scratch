@@ -139,7 +139,7 @@ class Dropout():
         if eval or self.dropout_prob == 0:
             return input
         dropped_num = input.shape[0] * self.dropout_prob
-        dropped = torch.randint(input.shape[0], (1, int(dropped_num)))
+        dropped = torch.randperm(input.shape[0])[:int(dropped_num)]
         for drop in dropped:
             input.data[drop] = 0
         return input
