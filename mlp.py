@@ -13,10 +13,10 @@ torch.manual_seed(sd)
 numpy.random.seed(sd)
 random.seed(sd)
 
-'''
-Individual linear layer for a network. Takes in number of input and output features.
-'''
 class Linear():
+    '''
+    Individual linear layer for a network. Takes in number of input and output features.
+    '''
     def __init__(self, in_features, out_features) -> None:
         self.weights = torch.empty((out_features, in_features), requires_grad=True)
 
@@ -38,14 +38,14 @@ class Linear():
         self.weights.data.sub_(self.weights.grad, alpha=lr) # Subtraction done in place to maintain gradients
         self.weights.grad.zero_()
 
-'''
-Applies Rectified Linear Unit activation function inplace.
-
-Returns 0 if negative and the number if positive.
-
-f(x) = max{0, x}
-'''
 class ReLU():
+    '''
+    Applies Rectified Linear Unit activation function inplace.
+
+    Returns 0 if negative and the number if positive.
+
+    f(x) = max{0, x}
+    '''
     def __init__(self) -> None:
         pass
 
@@ -60,13 +60,13 @@ class ReLU():
                 input.data[i] = 0
         return input
 
-'''
-Applies dropout function. Randomly drops out p% of neuron activations by setting
-them to zero.
-
-This function helps reduce overfitting.
-'''
 class Dropout():
+    '''
+    Applies dropout function. Randomly drops out p% of neuron activations by setting
+    them to zero.
+
+    This function helps reduce overfitting.
+    '''
     def __init__(self, p=0.2) -> None:
         if p < 0.0 or p > 1.0:
             raise ValueError(f"Dropout probability has to be between 0 and 1, but got {p}")
@@ -84,27 +84,27 @@ class Dropout():
             input.data[drop] = 0
         return input
 
-'''
-Basic multi-layer perceptron with one hidden layer, ReLU activation functions, dropout and
-CrossEntropyLoss.
-
-CrossEntropyLoss() combines nn.LogSoftmax() and nn.NLLLoss() in one single class, so no
-softmax is needed, however I still use softmax to get the actual prediction. I decided to
-write my own Linear and ReLU layers, but for ease of backpropogation decided to stick with
-the built-in PyTorch Softmax and CEL.
-
-In the future I will implement all my own functions, including backpropagation calculations.
-
-To initialize with layers create an object of the class with
-
-layers = [
-    (in_features, out_features),
-    ...
-]
-
-for as many layers as wanted. ReLU and Dropout are applied to all except last output layer.
-'''
 class MLP():
+    '''
+    Basic multi-layer perceptron with one hidden layer, ReLU activation functions, dropout and
+    CrossEntropyLoss.
+
+    CrossEntropyLoss() combines nn.LogSoftmax() and nn.NLLLoss() in one single class, so no
+    softmax is needed, however I still use softmax to get the actual prediction. I decided to
+    write my own Linear and ReLU layers, but for ease of backpropogation decided to stick with
+    the built-in PyTorch Softmax and CEL.
+
+    In the future I will implement all my own functions, including backpropagation calculations.
+
+    To initialize with layers create an object of the class with:
+
+        layers = [
+            (in_features, out_features),
+            ...
+        ]
+
+    for as many layers as wanted. ReLU and Dropout are applied to all except last output layer.
+    '''
     def __init__(self, layers, dp=0.2) -> None:
         self.layers = []
         for layer in layers:

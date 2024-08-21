@@ -4,12 +4,12 @@ from cv2 import imread, IMREAD_GRAYSCALE
 import csv
 
 
-'''
-Generic Dataset class.
-
-Includes getter, split/shuffle, and generator.
-'''
 class Dataset():
+    '''
+    Generic Dataset class.
+
+    Includes getter, split/shuffle, and generator.
+    '''
     def __init__(self, data) -> None:
         self.data = data
         self.len = len(data)
@@ -44,13 +44,13 @@ class Dataset():
         for i in range(self.len):
             yield self.data[i]
 
-'''
-Data class for titanic data, takes in csv files test.csv and train.csv.
-
-Contains 10 features + whether a passenger survived for train.csv. I am only
-loading 7 features.
-'''
 class TitanicDataset(Dataset):
+    '''
+    Data class for titanic data, takes in csv files test.csv and train.csv.
+
+    Contains 10 features + whether a passenger survived for train.csv. I am only
+    loading 7 features.
+    '''
     def __init__(self, data_pth) -> None:
         self.data = {}
         with open(f"{data_pth}/train.csv", newline='\n') as f:
@@ -72,15 +72,15 @@ class TitanicDataset(Dataset):
 
         self.len = len(self.data)
 
-'''
-Data class for MNIST data, takes in a data_pth and processes sub-folders,
-or takes in a dictionary of data.
-
-MNIST images are 28x28 grayscale.
-
-If loaded from data_pth each image is stored as a tuple with the data and the label.
-'''
 class MNISTDataset(Dataset):
+    '''
+    Data class for MNIST data, takes in a data_pth and processes sub-folders,
+    or takes in a dictionary of data.
+
+    MNIST images are 28x28 grayscale.
+
+    If loaded from data_pth each image is stored as a tuple with the data and the label.
+'''
     def __init__(self, data=None, data_pth=None) -> None:
         if data != None:
             assert(type(data) is dict)
