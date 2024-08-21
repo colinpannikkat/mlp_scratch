@@ -22,7 +22,7 @@ def main():
     print(f"Test Accuracy: {sum(test_accuracy)/len(test_accuracy)}")
     print("--------------------------------------")
 
-    mlp.save_weights("weights_5.pt")
+    # mlp.save_weights("weights.pt")
 
 if __name__ == "__main__":
     main()
